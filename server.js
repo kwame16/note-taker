@@ -25,6 +25,7 @@ app.post("/api/task", function(req, res) {
     "INSERT INTO notes (title,body) values (?,?)",
     [newNote.title, newNote.body],
     function(err, data) {
+        if (err) throw err;
         console.log("new note added!");
     }
   );
@@ -35,10 +36,19 @@ app.delete("/api/delete/:id", function(req,res){
     connection.query(
         "DELETE FROM notes WHERE id = ?", [id],
         function(err,data){
+            if (err) throw err;
             console.log("note deleted");
         }
         
     );
+});
+
+app.get("/", function(req,res){
+    res.sendFile(path.join(__dirname, "index.html"))
+});
+
+app.get("/notes", function(req,res){
+    res.sendFile(path.join(__dirname, "notes.html"))
 });
 
 
