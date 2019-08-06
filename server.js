@@ -30,6 +30,18 @@ app.post("/api/task", function(req, res) {
   );
 });
 
+app.delete("/api/delete/:id", function(req,res){
+    let id = req.params.id;
+    connection.query(
+        "DELETE FROM notes WHERE id = ?", [id],
+        function(err,data){
+            console.log("note deleted");
+        }
+        
+    );
+});
+
+
 app.listen(PORT, function() {
   console.log("App listening on PORT http://localhost:" + PORT);
 });
