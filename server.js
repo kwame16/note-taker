@@ -23,7 +23,7 @@ app.post("/api/task", function(req, res) {
   let newNote = req.body;
   connection.query(
     "INSERT INTO notes (title,body) values (?,?)",
-    [newNote.title, newNote.body],
+    [newNote.title, newNote.note],
     function(err, data) {
         if (err) throw err;
         console.log("new note added!");
@@ -32,7 +32,9 @@ app.post("/api/task", function(req, res) {
 });
 
 app.delete("/api/delete/:id", function(req,res){
-    let id = req.params.id;
+    let condition =  "id = " + req.params.id;
+    
+
     connection.query(
         "DELETE FROM notes WHERE id = ?", [id],
         function(err,data){

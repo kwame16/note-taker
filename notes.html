@@ -1,78 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0-11/css/all.min.css">
-<link rel="stylesheet" href="style.css">
-<title>Note Taker</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0-11/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <title>Note Taker</title>
 </head>
+
 <body>
-        <div class="container">
-                <div class="jumbotron">
-                  <h1>Personal Notes</h1>
-                  <h3>The greatest resource in the galaxy for life planning!</h3>
-                  <hr>
-                </div>
-                <div class="row">
-            
-                  <div class="col-12">
-            
-                    <div class="card">
-                      <div class="card-header">
-                        <h3><strong>Post notes here</strong></h3>
-                      </div>
-                      <div class="card-body">
-                        <form method="POST" role="form">
-            
-                          <div class="form-group">
-                            <label for="name">Title</label>
-                            <input type="text" class="form-control" id="name">
-                          </div>
-            
-                          <div class="form-group">
-                            <label for="role">Note</label>
-                            <input type="text" class="form-control" id="role">
-                          </div>
-            
-                        </form>
-                        <br>
-                        <div class="text-right">
-                          <button type="submit" class="btn btn-primary btn-md" id="add-btn">
-                              <span class="fa fa-fire"></span> Post</button>
-                        </div>
-                      </div>
-                    </div>
-            
-                  </div>
-                </div>
+  <div class="container">
+    <div class="jumbotron">
+      <h1>Personal Notes</h1>
+      <h3>The greatest resource in the galaxy for life planning!</h3>
+      <hr>
+    </div>
+    <div class="row">
+
+      <div class="col-12">
+
+        <div class="card">
+          <div class="card-header">
+            <h3><strong>Post notes here</strong></h3>
+          </div>
+          <div class="card-body">
+            <form method="POST" role="form">
+
+              <div class="form-group">
+                <label for="name">Title</label>
+                <input type="text" class="form-control" id="title">
               </div>
-            
-              <script type="text/javascript">
-                // Question: What does this code do?
-                $("#add-btn").on("click", function(event) {
-                  event.preventDefault();
-                  var newCharacter = {
-                    name: $("#name").val().trim(),
-                    role: $("#role").val().trim(),
-                    age: $("#age").val().trim(),
-                    forcePoints: $("#force-points").val().trim()
-                  };
-            
-                  // Question: What does this code do??
-                  $.post("/api/characters", newCharacter)
-                    .then(function(data) {
-                      console.log("add.html", data);
-                      alert("Adding character...");
-                    });
-                });
-              </script>
+
+              <div class="form-group">
+                <label for="role">Note</label>
+                <input type="text" class="form-control" id="note">
+              </div>
+
+            </form>
+            <br>
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary btn-md" id="add-btn">
+                <span class="fa fa-fire"></span> Post</button>
+            </div>
+          </div>
+
+          <div id="noteView">
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- jquery link -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <script type="text/javascript">
+    // Question: What does this code do?
+    $("#add-btn").on("click", function (event) {
+      location.reload();
+
+      console.log("this was clicked!");
+      event.preventDefault();
+      var newNote = {
+        title: $("#title").val().trim(),
+        note: $("#note").val().trim(),
+      };
+
+      // Question: What does this code do??
+      $.post("/api/task", newNote)
+        .then(function (data) {
+          console.log(data);
+          // alert("Adding Note...");
+          location.reload();
+        });
+    });
+
+    $.ajax("/api/notes", {
+      type: "GET"
+    }).then(function (data) {
+      var noteTitle = $("#noteTitle");
+      var noteBody = $("#noteText");
+      console.log(noteTitle);
+      console.log(noteBody);
+      console.log(data)
+
+      var notes = data
+      // var len = notes.;
+
+      for (i = 0; i < data.length; i++) {
+        // Push into array each data[i] using createAuthorRow(data[i])\
+        var newElem =
+          "<li>" + notes[i].id + ". " + "<p>" + notes[i].title + "</p>" + "<p>" + notes[i].body +
+          "<button class='delete-note' data=id'" +
+          notes[i].id + "'DELETE!</button></li>";
+        $("#noteView").append(newElem)
+        console.log("noteposted");
+      };
+
+      // Use renderAuthorList(array);
+    });
+
+    $(document).on("click", ".delete-note", function(event){
+      var id = $(this).data("id");
+    
+      // Send the Delete request 
+      $.ajax("/api/notes/" + id,{
+        type: "DELETE"
+      }).then(function(){
+        console.log("deleted note", id);
+        // reload the page to get the updated list
+        location.reload();
+      });
+    });
+
+
+    function createAuthorRow(authorData) {
+      var newTr = $("<tr>");
+      newTr.data("author", authorData);
+      newTr.append("<td>" + authorData.name + "</td>");
+      newTr.append("<td> " + authorData.Posts.length + "</td>");
+      newTr.append("<td><a href='/blog?author_id=" + authorData.id + "'>Go to Posts</a></td>");
+      newTr.append("<td><a href='/cms?author_id=" + authorData.id + "'>Create a Post</a></td>");
+      newTr.append("<td><a style='cursor:pointer;color:red' class='delete-author'>Delete Author</a></td>");
+      return newTr;
+    }
+    // create function renderAuthorList that takes an array and appends new rows to html tag
+    function renderAuthorList(rows) {
+
+    }
+
+   
+  </script>
 
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
+
 </html>
