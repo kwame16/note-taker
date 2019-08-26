@@ -97,8 +97,8 @@
         // Push into array each data[i] using createAuthorRow(data[i])\
         var newElem =
           "<li>" + notes[i].id + ". " + "<p>" + notes[i].title + "</p>" + "<p>" + notes[i].body +
-          "<button class='delete-note' data=id'" +
-          notes[i].id + "'DELETE!</button></li>";
+          "<button class='delete-note' data-id=" +
+          notes[i].id + ">DELETE!</button></li>";
         $("#noteView").append(newElem)
         console.log("noteposted");
       };
@@ -108,6 +108,8 @@
 
     $(document).on("click", ".delete-note", function(event){
       var id = $(this).data("id");
+
+      console.log(id);
     
       // Send the Delete request 
       $.ajax("/api/notes/" + id,{
@@ -115,8 +117,8 @@
       }).then(function(){
         console.log("deleted note", id);
         // reload the page to get the updated list
-        location.reload();
       });
+      location.reload();
     });
 
 

@@ -31,8 +31,8 @@ app.post("/api/task", function(req, res) {
   );
 });
 
-app.delete("/api/delete/:id", function(req,res){
-    let condition =  "id = " + req.params.id;
+app.delete("/api/notes/:id", function(req,res){
+    let id = req.params.id;
     
 
     connection.query(
