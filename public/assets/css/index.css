@@ -1,0 +1,17 @@
+body{
+background: url(/assets/images/bookworm.jpg);
+background-size: cover;
+/* background-repeat: no-repeat; */
+/* background: red; */
+}
+
+header{
+font-family: 'Dancing Script', cursive;
+font-size: 72px;
+text-align: center;
+color: #d4c6b9;
+}
+
+button{
+align-content: center;
+}

@@ -12,6 +12,9 @@ let PORT = process.env.PORT || 8000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// make public a static folder
+app.use(express.static("public"));
+
 app.get("/api/notes", function(req, res) {
   connection.query("SELECT * FROM notes", function(err, data) {
     if (err) throw err;
