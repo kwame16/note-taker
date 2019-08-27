@@ -5,13 +5,18 @@ background-size: cover;
 /* background: red; */
 }
 
-header{
+button{
 font-family: 'Dancing Script', cursive;
 font-size: 72px;
-text-align: center;
+margin-left: 40%;
 color: #d4c6b9;
+background: none;
+border: none;
+cursor: pointer;
+text-align: center;
+}
+button:hover {
+color: white;
 }
 
-button{
-align-content: center;
-}
+
